@@ -204,63 +204,7 @@ class _GameScreenState extends State<_GameScreen>
                             });
                       }),
 
-                  /*StreamBuilder(
-                    stream: updateCard(),
-                    builder: (context, async) {
-                      return CarouselSlider(
-                          key: _widgetKey,
-                          options: CarouselOptions(
-                            enableInfiniteScroll: false,
-                            aspectRatio: .9,
-                            enlargeCenterPage: true,
-                            autoPlay: false,
-                            onScrolled: (element) {
-                                if (isRun) {
-                                  if(_flipAnimation.value > 0.5){
-                                    _flipAnimationController.reverse();
-                                  }
-                                }
-                                scrollIndex = element!.toInt() + 1;
-                              }
-                          ),
-                          items: shuffled.map((e) {
-                            return StreamBuilder(
-                              stream: updateAnimation(scrollIndex),
-                                builder: (context, async) {
-                                  if(e['status'] != 'done'){
-                                    return GestureDetector(
-                                    onVerticalDragUpdate: (d) {
-                                      if (_flipAnimation.value < 0.5) {
-                                        _flipAnimationController.forward();
-                                      } else {
-                                        _flipAnimationController.reverse();
-                                      }
-                                    },
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Transform(
-                                        transform: Matrix4.identity()
-                                          ..setEntry(3, 2, 0.001)
-                                          ..rotateX(pi * _flipAnimation.value),
-                                        origin: Offset(width / 2, height / 2),
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20))),
-                                          child: _flipAnimation.value > 0.5
-                                              ? CardBackView(shuffled[scrollIndex])
-                                              : CardFrontView(shuffled[scrollIndex]),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                  }
-                                  return SizedBox(height: 0,);
-                                });
-                          }).toList());
-                    }
-                  ), */
+                  
                   Container(
                     padding: EdgeInsets.only(left: 40, right: 40),
                     child: Column(
