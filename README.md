@@ -1,16 +1,7 @@
 # flipcard
 
-A new Flutter project.
+Flipcard is an app to study your life taking memorizing classes.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+You can create your own cards inside cardsets inside categories(lesson, field etc.).
+And, you will be able go through all of the cards, Flip them to see the description.
+Mark cards as "Ask Later", "Done" to organize your cards.
