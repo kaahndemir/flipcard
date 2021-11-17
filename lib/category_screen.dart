@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:informative_cards/words_screen.dart';
 import 'package:intl/intl.dart';
@@ -55,7 +56,7 @@ class _CategoryMainState extends State<CategoryMain> {
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [backgroundLight, backgroundDark])),
+                    colors: [backgroundDark, backgroundLight])),
             child: SafeArea(
               child: Container(
                 margin: EdgeInsets.all(15),
@@ -67,9 +68,109 @@ class _CategoryMainState extends State<CategoryMain> {
                 ),
                 child: Scaffold(
                   backgroundColor: Colors.transparent,
-                  floatingActionButtonLocation:
-                      FloatingActionButtonLocation.endDocked,
-                  floatingActionButton: FloatingActionButton(
+                  body: Stack(
+                    children: [
+                      Column(
+                        children: [
+                          //Categories
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              //Category name
+                              Expanded(
+                                child: AutoSizeText(
+                                  returnCategoryAsMap()['name'],
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              ),
+                              //Date
+                              Expanded(
+                                flex: 0,
+                                child: Text(
+                                  formatDate((returnCategoryAsMap() as Map)['date'])
+                                      .toString(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w900),
+                                ),
+                              )
+                            ],
+                          ),
+                          GridView.builder(
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: 200,
+                                      childAspectRatio: 3 / 2,
+                                      crossAxisSpacing: 20,
+                                      mainAxisSpacing: 20),
+                              itemCount: returnCardsets().length,
+                              itemBuilder: (BuildContext context, index) {
+                                String name = returnCardSetAsMap(
+                                    index)['name']; //Cardset Name
+                                return Dismissible(
+                                  key: UniqueKey(),
+                                  onDismissed: (e) {
+                                    deleteCardSet(index);
+                                  },
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context,rootNavigator: true)
+                                          .pushNamed('/words', arguments: {
+                                        'categoryname': categoryID,
+                                        'cardsetname': name,
+                                        'cardsetid':
+                                            returnCardSetAsMap(index)['id'],
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 80,
+                                      margin: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(12)),
+                                        color: Colors.white,
+                                        backgroundBlendMode: BlendMode.overlay,
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                              margin: EdgeInsets.all(10),
+                                              child: Center(
+                                                child: AutoSizeText(
+                                                  name,
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: blueDark,
+                                                    fontFamily: 'Roboto',
+                                                    fontWeight: FontWeight.w800,
+                                                  ),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ],
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: FloatingActionButton(
                     onPressed: () {
                       showBottomSheet(
                           context: context,
@@ -138,91 +239,7 @@ class _CategoryMainState extends State<CategoryMain> {
                       Icons.add,
                       color: Colors.white,
                     ),
-                  ),
-                  body: Column(
-                    children: [
-                      //Categories
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          //Category name
-                          Text(
-                            returnCategoryAsMap()['name'],
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Roboto',
-                                fontSize: 24,
-                                fontWeight: FontWeight.w800),
-                          ),
-                          //Date
-                          Text(
-                            formatDate((returnCategoryAsMap() as Map)['date'])
-                                .toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Roboto',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900),
-                          )
-                        ],
-                      ),
-                      GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          childAspectRatio: 3 / 2,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20),
-                        itemCount: returnCardsets().length,
-                        itemBuilder: (BuildContext context, index) {
-                          String name = returnCardSetAsMap(index)['name']; //Cardset Name
-                          return Dismissible(
-                            key: UniqueKey(),
-                            onDismissed: (e) {
-                              deleteCardSet(index);
-                            },
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pushNamed('/words',
-                                    arguments: {
-                                      'categoryname': categoryID,
-                                      'cardsetname': name,
-                                      'cardsetid': returnCardSetAsMap(index)['id'],
-                                    });
-                              },
-                              child: Container(
-                                height: 80,
-                                margin: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
-                                  color: Colors.white,
-                                  backgroundBlendMode: BlendMode.overlay,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                        margin: EdgeInsets.all(10),
-                                        child: Center(
-                                          child: Text(
-                                            name,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: blueDark,
-                                              fontFamily: 'Roboto',
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                          ),
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
+                  ),)
                     ],
                   ),
                 ),
@@ -270,7 +287,7 @@ class _CategoryMainState extends State<CategoryMain> {
     //Delete category from tempList
     print('After Deleting \n $tempList');
     tempList.forEach((element) {
-      if(element['id'] == categoryID){
+      if (element['id'] == categoryID) {
         (element['cardsets'] as List).removeAt(index);
       }
     });

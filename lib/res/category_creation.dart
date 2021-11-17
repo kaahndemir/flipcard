@@ -11,8 +11,12 @@ List data = [
         'date': '2021-12-09 20:17:09.102',
         'id': '4651',
         'cards': [
-          {'id': '8789','word': 'Key Partners', 'exp': 'Who you are going to cooperate with'},
-          {'id': '8789','word': 'Value Propositions', 'exp': 'Who you are going to cooperate with'},
+          {'status': 'null','id': '8789','word': 'Key Partners', 'exp': 'Who you are going to cooperate with'},
+          {'status': 'null','id': '8669','word': 'Value Propositions', 'exp': 'What benefits you offer to customer'},
+          {'status': 'null','id': '8498','word': 'Key Resources', 'exp': 'What you have to accomplish your goal'},
+          {'status': 'null','id': '1939','word': 'Revenue Streams', 'exp': 'Where do the incomes come from'},
+          {'status': 'null','id': '1899','word': 'Customer Relationship', 'exp': 'How you are going to communicate your customer'},
+          {'status': 'null','id': '6542','word': 'Cost Structure', 'exp': 'What kind of outcomes you are going to have'},
         ]
       }
     ]
