@@ -1,4 +1,4 @@
-# informative_cards
+# flipcard
 
 A new Flutter project.
 

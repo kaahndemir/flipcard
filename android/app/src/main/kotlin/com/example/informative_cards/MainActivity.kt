@@ -1,4 +1,4 @@
-package com.example.informative_cards
+package com.example.flipcard
 
 import io.flutter.embedding.android.FlutterActivity
 

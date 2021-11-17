@@ -25,7 +25,7 @@ List data = [
 
 List categories = [];
 
-Future<List> setSharedPrefs() async{
+Future setSharedPrefs() async{
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   SharedPreferences prefs = await _prefs;
   var encodedMap = json.encode(data);

@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:informative_cards/card_back.dart';
-import 'package:informative_cards/card_front.dart';
-import 'package:informative_cards/res/category_creation.dart';
-import 'package:informative_cards/res/colors.dart';
+import 'package:flipcard/models/card_back.dart';
+import 'package:flipcard/models/card_front.dart';
+import 'package:flipcard/res/category_creation.dart';
+import 'package:flipcard/res/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

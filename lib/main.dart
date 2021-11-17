@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:informative_cards/game_screen.dart';
+import 'package:flipcard/game_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'category_screen.dart';
 import 'package:flutter/material.dart';
@@ -81,12 +81,7 @@ class _MainState extends State<Main> {
                     shadowColor: Colors.transparent,
                     title: Text('FlipCard'),
                     actions: [
-                      
-                      SizedBox(width: 10,),
-                      Icon(Icons.settings),
-                      SizedBox(width: 15,),
                     ],
-                    
                   ),
                   body: Stack(
                     children: [

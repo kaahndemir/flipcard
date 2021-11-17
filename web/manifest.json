@@ -1,6 +1,6 @@
 {
-    "name": "informative_cards",
-    "short_name": "informative_cards",
+    "name": "flipcard",
+    "short_name": "flipcard",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
