@@ -54,180 +54,182 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    setSharedPrefs();
+    checkSharedPrefs();
   }
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      setSharedPrefs();
-    });
-
     return FutureBuilder(
-        future: setSharedPrefs(),
-        builder: (BuildContext context, AsyncSnapshot) {
-          return Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [backgroundLight, backgroundDark])),
-                child: Scaffold(
-                  backgroundColor: Colors.transparent,
-                  appBar: AppBar(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10))),
-                    backgroundColor: backgroundDark,
-                    shadowColor: Colors.transparent,
-                    title: Text('FlipCard'),
-                    actions: [
-                    ],
-                  ),
-                  body: Stack(
-                    children: [
-                      Column(
-                        children: [
-                          //Categories
-                          Expanded(
-                              child: ListView.builder(
-                                  itemCount: categories.length,
-                                  itemBuilder: (BuildContext context, index) {
-                                    Map category = categories[index];
-                                    String name = category['name'];
-                                    return Dismissible(
-                                          key: UniqueKey(),
-                                          onDismissed: (e) => deleteCategory(e, name),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              print('Tapped on $index');
-                                              Navigator.of(context,rootNavigator: true).pushNamed('/category',
-                                                  arguments: {'id': categories[index]['id']});
-                                            },
-                                            child: Container(
-                                              height: 70,
-                                              margin: EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(12)),
-                                                color: Colors.white,
-                                                backgroundBlendMode:
-                                                    BlendMode.softLight,
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                      margin: EdgeInsets.only(left: 25),
-                                                      child: AutoSizeText(
-                                                        name,
-                                                        maxLines: 2,
-                                                        style: TextStyle(
-                                                          fontSize: 22,
-                                                          color: Colors.white,
-                                                          fontFamily: 'Roboto',
-                                                          fontWeight: FontWeight.w800,
-                                                        ),
-                                                      )),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      
-                                  }))
+      future: setSharedPrefs(),
+      builder: (context, snapshot) {
+        if(snapshot.connectionState == ConnectionState.none || snapshot.connectionState == ConnectionState.waiting){
+          return Container();
+        }
+        return Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [backgroundLight, backgroundDark])),
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                      appBar: AppBar(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10))),
+                        backgroundColor: backgroundDark,
+                        shadowColor: Colors.transparent,
+                        title: Text('FlipCard'),
+                        actions: [
                         ],
                       ),
-                      Positioned(
-                        bottom: 10,
-                        right: 10,
-                        child: FloatingActionButton(
-                          onPressed: () {
-                            showBottomSheet(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                context: context,
-                                builder: (context) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      FocusManager.instance.primaryFocus!
-                                          .nextFocus();
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: blueMediumLight,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(15),
-                                            topRight: Radius.circular(15)),
-                                      ),
-                                      height: 180,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Container(
-                                            margin:
-                                                EdgeInsets.symmetric(horizontal: 5),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(50)),
-                                                color: Colors.white),
-                                            child: TextField(
-                                              controller: categoryContoller,
-                                              decoration: InputDecoration(
-                                                  hintText: 'Enter category name',
-                                                  hintStyle:
-                                                      TextStyle(fontSize: 18),
-                                                  contentPadding:
-                                                      EdgeInsets.only(left: 15)),
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                writeDataToPrefs();
-                                                Navigator.pop(context);
-                                              });
-                                            },
-                                            child: Container(
-                                                decoration: BoxDecoration(
+                      body: Stack(
+                        children: [
+                          Column(
+                            children: [
+                              //Categories
+                              Expanded(
+                                  child: ListView.builder(
+                                      itemCount: categories.length,
+                                      itemBuilder: (BuildContext context, index) {
+                                        Map category = categories[index];
+                                        String name = category['name'];
+                                        return Dismissible(
+                                              key: UniqueKey(),
+                                              onDismissed: (e) => deleteCategory(e, name),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  print('Tapped on $index');
+                                                  Navigator.of(context,rootNavigator: true).pushNamed('/category',
+                                                      arguments: {'id': categories[index]['id']});
+                                                },
+                                                child: Container(
+                                                  height: 70,
+                                                  margin: EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.all(
                                                         Radius.circular(12)),
-                                                    color: Colors.white),
-                                                child: Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      20,
-                                                  height: 50,
-                                                  child: Center(
-                                                      child: Text(
-                                                    'Save',
-                                                    style: TextStyle(fontSize: 20),
-                                                  )),
-                                                )),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                });
-                          },
-                          backgroundColor: blueMediumLight,
-                          foregroundColor: blueMediumLight,
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
+                                                    color: Colors.white,
+                                                    backgroundBlendMode:
+                                                        BlendMode.softLight,
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                          margin: EdgeInsets.only(left: 25),
+                                                          child: AutoSizeText(
+                                                            name,
+                                                            maxLines: 2,
+                                                            style: TextStyle(
+                                                              fontSize: 22,
+                                                              color: Colors.white,
+                                                              fontFamily: 'Roboto',
+                                                              fontWeight: FontWeight.w800,
+                                                            ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          
+                                      }))
+                            ],
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-        });
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: FloatingActionButton(
+                              onPressed: () {
+                                showBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10)),
+                                    context: context,
+                                    builder: (context) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          FocusManager.instance.primaryFocus!
+                                              .nextFocus();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: blueMediumLight,
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15)),
+                                          ),
+                                          height: 180,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.symmetric(horizontal: 5),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.all(
+                                                        Radius.circular(50)),
+                                                    color: Colors.white),
+                                                child: TextField(
+                                                  controller: categoryContoller,
+                                                  decoration: InputDecoration(
+                                                      hintText: 'Enter category name',
+                                                      hintStyle:
+                                                          TextStyle(fontSize: 18),
+                                                      contentPadding:
+                                                          EdgeInsets.only(left: 15)),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    writeDataToPrefs();
+                                                    Navigator.pop(context);
+                                                  });
+                                                },
+                                                child: Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(12)),
+                                                        color: Colors.white),
+                                                    child: Container(
+                                                      width: MediaQuery.of(context)
+                                                              .size
+                                                              .width -
+                                                          20,
+                                                      height: 50,
+                                                      child: Center(
+                                                          child: Text(
+                                                        'Save',
+                                                        style: TextStyle(fontSize: 20),
+                                                      )),
+                                                    )),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              },
+                              backgroundColor: blueMediumLight,
+                              foregroundColor: blueMediumLight,
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+        
+      }
+    );
+        
   }
 
   writeDataToPrefs() async {
@@ -270,11 +272,10 @@ class _MainState extends State<Main> {
     });
   }
 
-  Stream updateList() async*{
+  void checkSharedPrefs() async{
+    await setSharedPrefs();
     setState(() {
       categories;
     });
   }
-
-  
 }

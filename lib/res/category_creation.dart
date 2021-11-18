@@ -24,6 +24,7 @@ List data = [
 ];
 
 List categories = [];
+Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
 Future setSharedPrefs() async{
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
