@@ -39,7 +39,11 @@ class _WordsScreenState extends State<WordsScreen> {
             backgroundColor: Colors.transparent,
             body: FutureBuilder(
                 future: setSharedPrefs(),
-                builder: (context, AsyncSnapshot async) {
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.none ||
+                      snapshot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  }
                   return CardsScreen();
                 })));
   }
@@ -188,50 +192,73 @@ class _CardsScreenState extends State<CardsScreen> {
                                       builder: (context, snapshot) {
                                         return ListView.builder(
                                             shrinkWrap: true,
-                                            itemCount: returnCardSetAsMap()['cards']
+                                            itemCount:
+                                                returnCardSetAsMap()['cards']
                                                     .length,
                                             itemBuilder: (context, index) {
-                                              var item =returnCardSetAsMap()['cards']
+                                              var item =
+                                                  returnCardSetAsMap()['cards']
                                                       [index];
                                               return Column(
-                                                
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Slidable(
                                                     key: UniqueKey(),
                                                     startActionPane: ActionPane(
-                                                      extentRatio: 1/2,
+                                                        extentRatio: 1 / 2,
                                                         motion: ScrollMotion(),
                                                         children: [
-                                                            SlidableAction(
-                                                              label: isDone(index)? 'Mark As Undone': 'Mark As Done',
-                                                              icon: isDone(index)?Icons.mark_as_unread_rounded : Icons.done,
-                                                              foregroundColor: blueMediumLight,
-                                                              onPressed: (context) {
-                                                              if(isDone(index)){
-                                                                markAsUndone(index);
-                                                              } else {
-                                                                markAsDone(index);
-                                                              }
-                                                              }
-                                                            ),
+                                                          SlidableAction(
+                                                              label: isDone(
+                                                                      index)
+                                                                  ? 'Mark As Undone'
+                                                                  : 'Mark As Done',
+                                                              icon: isDone(
+                                                                      index)
+                                                                  ? Icons
+                                                                      .mark_as_unread_rounded
+                                                                  : Icons.done,
+                                                              foregroundColor:
+                                                                  blueMediumLight,
+                                                              onPressed:
+                                                                  (context) {
+                                                                if (isDone(
+                                                                    index)) {
+                                                                  markAsUndone(
+                                                                      index);
+                                                                } else {
+                                                                  markAsDone(
+                                                                      index);
+                                                                }
+                                                              }),
                                                         ]),
-                                                        endActionPane: ActionPane(
-                                                      extentRatio: 1/2,
+                                                    endActionPane: ActionPane(
+                                                        extentRatio: 1 / 2,
                                                         motion: ScrollMotion(),
-                                                        dismissible: DismissiblePane(onDismissed: () {removeCard(index);},),
+                                                        dismissible:
+                                                            DismissiblePane(
+                                                          onDismissed: () {
+                                                            removeCard(index);
+                                                          },
+                                                        ),
                                                         children: [
-                                                            SlidableAction(
+                                                          SlidableAction(
                                                               label: 'Delete',
-                                                              foregroundColor: Colors.white,
-                                                              backgroundColor: Colors.red,
-                                                              onPressed: (context) {
-                                                              removeCard(index);}
-                                                            ),
+                                                              foregroundColor:
+                                                                  Colors.white,
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                              onPressed:
+                                                                  (context) {
+                                                                removeCard(
+                                                                    index);
+                                                              }),
                                                         ]),
                                                     child: Container(
-                                                      constraints: BoxConstraints(minHeight: 30),
+                                                      constraints:
+                                                          BoxConstraints(
+                                                              minHeight: 30),
                                                       margin:
                                                           EdgeInsets.symmetric(
                                                               horizontal: 10,
@@ -310,16 +337,34 @@ class _CardsScreenState extends State<CardsScreen> {
                                     child: GestureDetector(
                                       onTap: () {
                                         //If there isn't any card created, show snack bar
-                                        if(returnCardSetAsMap()['cards'].isEmpty){
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: Duration(seconds: 2),backgroundColor: blueMediumLight,content: Text('Create some cards to shuffle')));
-                                        
-                                        //if returnUndones are empty show snackbar
-                                        } else if(returnUndones().isEmpty){
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: Duration(seconds: 2),backgroundColor: blueMediumLight,content: Text('All cards are marked as Done')));
+                                        if (returnCardSetAsMap()['cards']
+                                            .isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  duration:
+                                                      Duration(seconds: 2),
+                                                  backgroundColor:
+                                                      blueMediumLight,
+                                                  content: Text(
+                                                      'Create some cards to shuffle')));
+
+                                          //if returnUndones are empty show snackbar
+                                        } else if (returnUndones().isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  duration:
+                                                      Duration(seconds: 2),
+                                                  backgroundColor:
+                                                      blueMediumLight,
+                                                  content: Text(
+                                                      'All cards are marked as Done')));
                                         } else {
-                                          Navigator.pushNamed(context, '/game', arguments: {'categoryid': categoryID, 'cardsetid': cardsetID});
+                                          Navigator.pushNamed(context, '/game',
+                                              arguments: {
+                                                'categoryid': categoryID,
+                                                'cardsetid': cardsetID
+                                              });
                                         }
-                                        
                                       },
                                       child: Container(
                                         height: 55,
@@ -596,7 +641,7 @@ class _CardsScreenState extends State<CardsScreen> {
     });
   }
 
-  void markAsUndone(int index) async{
+  void markAsUndone(int index) async {
     final _prefs = SharedPreferences.getInstance();
     SharedPreferences prefs = await _prefs;
     List tempList = json.decode(prefs.getString('categories').toString());
@@ -623,21 +668,21 @@ class _CardsScreenState extends State<CardsScreen> {
   }
 
   bool isDone(int index) {
-  String status = returnCardSetAsMap()['cards'][index]['status'];
-  bool isDone = status == 'done'? true : false;
-  print('Status: $status | isDone: $isDone');
-  return isDone;
+    String status = returnCardSetAsMap()['cards'][index]['status'];
+    bool isDone = status == 'done' ? true : false;
+    print('Status: $status | isDone: $isDone');
+    return isDone;
   }
+
   returnUndones() {
     List tempList = [];
-    for(Map e in returnCardSetAsMap()['cards']){
-      if(e['status'] != 'done'){
+    for (Map e in returnCardSetAsMap()['cards']) {
+      if (e['status'] != 'done') {
         tempList.add(e);
       }
     }
     return tempList;
   }
-  
 }
 
 class WordDivider extends StatelessWidget {

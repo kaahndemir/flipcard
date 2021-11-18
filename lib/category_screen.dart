@@ -49,7 +49,10 @@ class _CategoryMainState extends State<CategoryMain> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: setSharedPrefs(),
-        builder: (BuildContext context, AsyncSnapshot) {
+        builder: (BuildContext context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.none || snapshot.connectionState == ConnectionState.waiting){
+          return Container();
+          }
           return Container(
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
