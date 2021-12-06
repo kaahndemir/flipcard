@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flipcard/models/card_back.dart';
-import 'package:flipcard/models/card_front.dart';
-import 'package:flipcard/res/category_creation.dart';
-import 'package:flipcard/res/colors.dart';
+import 'package:FlipCard/models/card_back.dart';
+import 'package:FlipCard/models/card_front.dart';
+import 'package:FlipCard/res/category_creation.dart';
+import 'package:FlipCard/res/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -215,7 +215,7 @@ class _GameScreenState extends State<_GameScreen>
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    flipCard();
+                                    FlipCard();
                                   });
                                 },
                                 child: Container(
@@ -344,7 +344,7 @@ class _GameScreenState extends State<_GameScreen>
     return formattedDate;
   }
 
-  Future flipCard() async {
+  Future FlipCard() async {
     if (_flipAnimation.value < 0.5) {
       _flipAnimationController.forward();
     } else {

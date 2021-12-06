@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flipcard/game_screen.dart';
+import 'package:FlipCard/game_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'category_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,9 @@ import 'words_screen.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const Home());
 }
 

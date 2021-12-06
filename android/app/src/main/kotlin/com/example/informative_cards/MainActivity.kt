@@ -1,4 +1,4 @@
-package com.example.flipcard
+package com.example.FlipCard
 
 import io.flutter.embedding.android.FlutterActivity
 
