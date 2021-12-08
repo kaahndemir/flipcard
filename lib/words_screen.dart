@@ -33,19 +33,17 @@ class _WordsScreenState extends State<WordsScreen> {
     cardsetName = arguments['cardsetname'];
     cardsetID = arguments['cardsetid'];
 
-    return MaterialApp(
-        routes: {'/game': (context) => const GamePage()},
-        home: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: FutureBuilder(
-                future: setSharedPrefs(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.none ||
-                      snapshot.connectionState == ConnectionState.waiting) {
-                    return Container();
-                  }
-                  return CardsScreen();
-                })));
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: FutureBuilder(
+            future: setSharedPrefs(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.none ||
+                  snapshot.connectionState == ConnectionState.waiting) {
+                return Container();
+              }
+              return CardsScreen();
+            }));
   }
 }
 
@@ -91,7 +89,9 @@ class _CardsScreenState extends State<CardsScreen> {
                         Expanded(
                           child: AutoSizeText(
                             returnCategoryAsMap()['name'],
-                            maxLines: 2,
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                            
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Roboto',
@@ -132,7 +132,7 @@ class _CardsScreenState extends State<CardsScreen> {
                                   margin: EdgeInsets.only(top: 2, bottom: 12),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
@@ -151,10 +151,11 @@ class _CardsScreenState extends State<CardsScreen> {
                                       Expanded(
                                         flex: 0,
                                         child: AutoSizeText(
-                                          'Date created: ${formatDate(returnCardSetAsMap()['date'].toString())}',
+                                          'Date: \n ${formatDate(returnCardSetAsMap()['date'].toString())}',
                                           maxLines: 2,
+                                          textAlign: TextAlign.end,
                                           style: TextStyle(
-                                              color: backgroundDark,
+                                              color: blueMediumLight,
                                               fontFamily: 'Roboto',
                                               fontSize: 14,
                                               fontWeight: FontWeight.w500),
@@ -359,11 +360,9 @@ class _CardsScreenState extends State<CardsScreen> {
                                                   content: Text(
                                                       'All cards are marked as Done')));
                                         } else {
-                                          Navigator.pushNamed(context, '/game',
-                                              arguments: {
-                                                'categoryid': categoryID,
-                                                'cardsetid': cardsetID
-                                              });
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => GamePage(p_cardsetID: cardsetID, p_categoryID: categoryID,)),
+                                              
+                                         );
                                         }
                                       },
                                       child: Container(
@@ -389,7 +388,7 @@ class _CardsScreenState extends State<CardsScreen> {
                                             ]),
                                         child: Center(
                                           child: Text(
-                                            'Shuffle',
+                                            'FlipCard',
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w800,
@@ -434,15 +433,17 @@ class _CardsScreenState extends State<CardsScreen> {
                                                                       .circular(
                                                                           50)),
                                                           color: Colors.white,
-                                                          backgroundBlendMode:
-                                                              BlendMode.overlay,
+                                                          
                                                         ),
                                                         child: TextField(
                                                           controller:
                                                               wordContoller,
                                                           decoration: InputDecoration(
+                                                              border:
+                                                                  InputBorder
+                                                                      .none,
                                                               hintText:
-                                                                  'Enter word',
+                                                                  'Enter concept (front of the card)',
                                                               hintStyle:
                                                                   TextStyle(
                                                                       fontSize:
@@ -466,10 +467,14 @@ class _CardsScreenState extends State<CardsScreen> {
                                                             color:
                                                                 Colors.white),
                                                         child: TextField(
+                                                          
                                                           maxLines: null,
                                                           controller:
                                                               expContoller,
                                                           decoration: InputDecoration(
+                                                            border:
+                                                                  InputBorder
+                                                                      .none,
                                                               hintText:
                                                                   'Enter explanation',
                                                               hintStyle:
@@ -483,8 +488,8 @@ class _CardsScreenState extends State<CardsScreen> {
                                                         ),
                                                       ),
                                                       GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
+                                                        onTap: () async{
+                                                          setState((){
                                                             createCard();
                                                             Navigator.pop(
                                                                 context);
@@ -507,7 +512,7 @@ class _CardsScreenState extends State<CardsScreen> {
                                                               height: 50,
                                                               child: Center(
                                                                   child: Text(
-                                                                'Save',
+                                                                'Add',
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         20),
@@ -589,6 +594,8 @@ class _CardsScreenState extends State<CardsScreen> {
         });
       }
     });
+    wordContoller.clear();
+    expContoller.clear();
     setState(() {
       prefs.setString('categories', json.encode(tempList));
     });
