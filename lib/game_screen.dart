@@ -11,14 +11,17 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePage extends StatefulWidget {
-  const GamePage({Key? key}) : super(key: key);
+  final String p_categoryID;
+  
+  final String p_cardsetID;
+  const GamePage({Key? key, required this.p_categoryID, required this.p_cardsetID}) : super(key: key);
 
   @override
   _GamePageState createState() => _GamePageState();
 }
 
 String categoryID = '';
-String cardsetName = '';
+
 String cardsetID = '';
 
 List shuffled = [];
@@ -34,13 +37,15 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    /* final arguments = ModalRoute.of(context)!.settings.arguments as Map;
     categoryID = arguments['categoryid'];
-    cardsetID = arguments['cardsetid'];
+    cardsetID = arguments['cardsetid']; */
 
-    return MaterialApp(
-      home: Scaffold(backgroundColor: Colors.transparent, body: _GameScreen()),
-    );
+    cardsetID = widget.p_cardsetID;
+    categoryID = widget.p_categoryID;
+
+    return Scaffold(backgroundColor: Colors.transparent, body: _GameScreen());
+    
   }
 
   createShuffledList() async {

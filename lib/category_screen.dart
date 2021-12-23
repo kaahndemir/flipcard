@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:FlipCard/main.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:FlipCard/words_screen.dart';
@@ -17,6 +18,9 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+
+  
+
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
@@ -27,14 +31,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
     });
     return MaterialApp(
         routes: {
-          '/words': (context) => const WordsScreen(),
-        },
-        home: Scaffold(
-            backgroundColor: Colors.transparent, body: CategoryMain()));
+          '/words': (context) => const WordsScreen(),},
+        home: Scaffold(backgroundColor: Colors.transparent, body: CategoryMain()));
   }
 }
 
-final cardsetContoller = TextEditingController();
+final cardsetController = TextEditingController();
 var uuid = Uuid();
 
 class CategoryMain extends StatefulWidget {
@@ -43,15 +45,21 @@ class CategoryMain extends StatefulWidget {
   @override
   State<CategoryMain> createState() => _CategoryMainState();
 }
+final height = 683;
+double heightRatio = 1;
 
 class _CategoryMainState extends State<CategoryMain> {
   @override
   Widget build(BuildContext context) {
+    //683 is the height of the emulator
+    heightRatio = (height / 683);
+    print('Height: $height');
     return FutureBuilder(
         future: setSharedPrefs(),
         builder: (BuildContext context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.none || snapshot.connectionState == ConnectionState.waiting){
-          return Container();
+          if (snapshot.connectionState == ConnectionState.none ||
+              snapshot.connectionState == ConnectionState.waiting) {
+            return Container();
           }
           return Container(
             padding: EdgeInsets.all(5),
@@ -83,7 +91,8 @@ class _CategoryMainState extends State<CategoryMain> {
                               Expanded(
                                 child: AutoSizeText(
                                   returnCategoryAsMap()['name'],
-                                  maxLines: 2,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Roboto',
@@ -95,7 +104,8 @@ class _CategoryMainState extends State<CategoryMain> {
                               Expanded(
                                 flex: 0,
                                 child: Text(
-                                  formatDate((returnCategoryAsMap() as Map)['date'])
+                                  formatDate((returnCategoryAsMap()
+                                          as Map)['date'])
                                       .toString(),
                                   style: TextStyle(
                                       color: Colors.white,
@@ -125,7 +135,7 @@ class _CategoryMainState extends State<CategoryMain> {
                                   },
                                   child: GestureDetector(
                                     onTap: () {
-                                      Navigator.of(context,rootNavigator: true)
+                                      Navigator.of(context, rootNavigator: true)
                                           .pushNamed('/words', arguments: {
                                         'categoryname': categoryID,
                                         'cardsetname': name,
@@ -137,13 +147,14 @@ class _CategoryMainState extends State<CategoryMain> {
                                       height: 80,
                                       margin: EdgeInsets.all(5),
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.all(Radius.circular(12)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(12)),
                                         color: Colors.white,
                                         backgroundBlendMode: BlendMode.overlay,
                                       ),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
@@ -174,75 +185,90 @@ class _CategoryMainState extends State<CategoryMain> {
                         bottom: 0,
                         right: 0,
                         child: FloatingActionButton(
-                    onPressed: () {
-                      showBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                FocusManager.instance.primaryFocus!.nextFocus();
-                              },
-                              child: Container(
-                                color: blueMediumLight,
-                                height: 180,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 5),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(50)),
-                                          color: Colors.white),
-                                      child: TextField(
-                                        controller: cardsetContoller,
-                                        decoration: InputDecoration(
-                                            hintText: 'Enter cardset name',
-                                            hintStyle: TextStyle(fontSize: 18),
-                                            contentPadding:
-                                                EdgeInsets.only(left: 15)),
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.white,
+                          child: Icon(
+                            Icons.add,
+                            color: blueMediumLight,
+                          ),
+                          onPressed: () {
+                            showBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      FocusManager.instance.primaryFocus!
+                                          .nextFocus();
+                                    },
+                                    child: Container(
+                                      color: blueMediumLight,
+                                      height: 150, 
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(50)),
+                                                color: Colors.white),
+                                            child: TextField(
+                                              
+                                              controller: cardsetController,
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  hintText:
+                                                      'Enter cardset name',
+                                                  hintStyle:
+                                                      TextStyle(fontSize: 18),
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          left: 15)),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                if(cardsetController.text.isNotEmpty){
+                                                  createCardSet();
+                                                }
+                                                
+                                                
+                                                Navigator.pop(context);
+                                              });
+                                            },
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                12)),
+                                                    color: Colors.white),
+                                                child: Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width -
+                                                      20,
+                                                  height: 50,
+                                                  child: Center(
+                                                      child: Text(
+                                                    'Save',
+                                                    style:
+                                                        TextStyle(fontSize: 20),
+                                                  )),
+                                                )),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          createCardSet();
-                                          Navigator.pop(context);
-                                        });
-                                      },
-                                      child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(12)),
-                                              color: Colors.white),
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width -
-                                                20,
-                                            height: 50,
-                                            child: Center(
-                                                child: Text(
-                                              'Save',
-                                              style: TextStyle(fontSize: 20),
-                                            )),
-                                          )),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          });
-                    },
-                    backgroundColor: blueMediumLight,
-                    foregroundColor: blueMediumLight,
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                  ),)
+                                  );
+                                });
+                          },
+                          
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -308,13 +334,15 @@ class _CategoryMainState extends State<CategoryMain> {
     for (Map d in tempList) {
       if (d['id'] == categoryID) {
         d['cardsets'].add({
-          'name': cardsetContoller.text.toString(),
+          'name': cardsetController.text.toString(),
           'id': uuid.v4(),
           'date': DateTime.now().toString(),
           'cards': [],
         });
       }
     }
+    //Clean textfield
+    cardsetController.clear();
     prefs.setString('categories', json.encode(tempList).toString());
   }
 }

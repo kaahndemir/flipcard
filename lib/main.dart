@@ -180,6 +180,7 @@ class _MainState extends State<Main> {
                                                 child: TextField(
                                                   controller: categoryContoller,
                                                   decoration: InputDecoration(
+                                                    border: InputBorder.none,
                                                       hintText: 'Enter category name',
                                                       hintStyle:
                                                           TextStyle(fontSize: 18),

@@ -37,6 +37,7 @@ class _CardBackViewState extends State<CardBackView> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(15),
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width - 50,
       decoration: BoxDecoration(
