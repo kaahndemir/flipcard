@@ -11,10 +11,10 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePage extends StatefulWidget {
-  final String p_categoryID;
   
-  final String p_cardsetID;
-  const GamePage({Key? key, required this.p_categoryID, required this.p_cardsetID}) : super(key: key);
+  
+  final String cardBoxId;
+  const GamePage({Key? key, required this.cardBoxId}) : super(key: key);
 
   @override
   _GamePageState createState() => _GamePageState();
@@ -22,7 +22,7 @@ class GamePage extends StatefulWidget {
 
 String categoryID = '';
 
-String cardsetID = '';
+String cardBoxId = '';
 
 List shuffled = [];
 double _rotationFactor = 0;
@@ -41,8 +41,8 @@ class _GamePageState extends State<GamePage> {
     categoryID = arguments['categoryid'];
     cardsetID = arguments['cardsetid']; */
 
-    cardsetID = widget.p_cardsetID;
-    categoryID = widget.p_categoryID;
+    cardBoxId = widget.cardBoxId;
+    
 
     return Scaffold(backgroundColor: Colors.transparent, body: _GameScreen());
     
@@ -74,7 +74,7 @@ class _GamePageState extends State<GamePage> {
   returnCardSetAsMap() {
     Map cardSet = {};
     for (Map d in returnCategoryAsMap()['cardsets']) {
-      if (d['id'] == cardsetID) {
+      if (d['id'] == cardBoxId) {
         cardSet = d;
       }
     }
@@ -82,7 +82,7 @@ class _GamePageState extends State<GamePage> {
   }
 
   returnCategoryAsMap() {
-    for (Map d in categories) {
+    for (Map d in cardBoxes) {
       if (d['id'] == categoryID) {
         return d;
       }
@@ -130,8 +130,7 @@ class _GameScreenState extends State<_GameScreen>
     height = renderBox.size.height;
     width = renderBox.size.width;
 
-    isRun =
-        true; //If the build is complete, activate onScroll for CarouselSlider
+    isRun = true; //If the build is complete, activate onScroll for CarouselSlider
     print("SIZE of widget game screen: $widgetSize");
   }
 
@@ -326,7 +325,7 @@ class _GameScreenState extends State<_GameScreen>
   }
 
   returnCategoryAsMap() {
-    for (Map d in categories) {
+    for (Map d in cardBoxes) {
       if (d['id'] == categoryID) {
         return d;
       }
@@ -336,7 +335,7 @@ class _GameScreenState extends State<_GameScreen>
   returnCardSetAsMap() {
     Map cardSet = {};
     for (Map d in returnCategoryAsMap()['cardsets']) {
-      if (d['id'] == cardsetID) {
+      if (d['id'] == cardBoxId) {
         cardSet = d;
       }
     }
@@ -393,7 +392,7 @@ class _GameScreenState extends State<_GameScreen>
     for (var element in tempList) {
       if (element['id'] == categoryID) {
         element['cardsets'].forEach((element) {
-          if (element['id'] == cardsetID) {
+          if (element['id'] == cardBoxId) {
             element['cards'].forEach((element) {
               if (element['id'] == shuffled[scrollIndex]['id']) {
                 element['status'] = 'done';

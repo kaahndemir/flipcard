@@ -1,3 +1,4 @@
+import 'package:FlipCard/res/colors.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
@@ -11,16 +12,16 @@ class CardFrontView extends StatelessWidget {
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width - 50,
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: blueDark.withOpacity(0.95),
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Container(
         child: AutoSizeText(
-          cardMap['word'],
+          cardMap['term'],
           minFontSize: 12,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 25,
-            
+            color: Colors.white
           ),
         ),
       ),

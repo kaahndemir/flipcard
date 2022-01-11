@@ -1,0 +1,24 @@
+CARDBOX SCREEN
+    Card Functionality
+        mark as done ✅
+        mark as undone ✅
+        create card errs ✅
+        
+        -EDIT CARD
+            dialog 
+            editing widgets 
+    
+    BottomBar
+        shape ✅
+        addCard ✅
+            edittext => flip => edittext => tap 'save'✅
+        retrive deleted cards
+        FlipCard ✅
+
+MAIN SCREEN
+    Search Bar    
+
+Problems
+    update ui when sharedPreferences changed 
+    delete categories
+

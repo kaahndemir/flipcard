@@ -1,4 +1,4 @@
-import 'dart:convert';
+/* import 'dart:convert';
 
 import 'package:FlipCard/main.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -10,45 +10,45 @@ import 'package:uuid/uuid.dart';
 import 'res/colors.dart';
 import 'res/category_creation.dart';
 
-class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({Key? key}) : super(key: key);
+class CardBoxScreen extends StatefulWidget {
+  const CardBoxScreen({Key? key}) : super(key: key);
 
   @override
-  _CategoryScreenState createState() => _CategoryScreenState();
+  _CardBoxScreenState createState() => _CardBoxScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
+class _CardBoxScreenState extends State<CardBoxScreen> {
 
   
 
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    categoryID = arguments['id'];
-    print(categoryID);
+    cardBoxId = arguments['id'];
+    print(cardBoxId);
     setState(() {
       setSharedPrefs();
     });
     return MaterialApp(
         routes: {
           '/words': (context) => const WordsScreen(),},
-        home: Scaffold(backgroundColor: Colors.transparent, body: CategoryMain()));
+        home: Scaffold(backgroundColor: Colors.transparent, body: CardBox()));
   }
 }
 
 final cardsetController = TextEditingController();
 var uuid = Uuid();
 
-class CategoryMain extends StatefulWidget {
-  const CategoryMain({Key? key}) : super(key: key);
+class CardBox extends StatefulWidget {
+  const CardBox({Key? key}) : super(key: key);
 
   @override
-  State<CategoryMain> createState() => _CategoryMainState();
+  State<CardBox> createState() => _CardBoxState();
 }
 final height = 683;
 double heightRatio = 1;
 
-class _CategoryMainState extends State<CategoryMain> {
+class _CardBoxState extends State<CardBox> {
   @override
   Widget build(BuildContext context) {
     //683 is the height of the emulator
@@ -137,7 +137,7 @@ class _CategoryMainState extends State<CategoryMain> {
                                     onTap: () {
                                       Navigator.of(context, rootNavigator: true)
                                           .pushNamed('/words', arguments: {
-                                        'categoryname': categoryID,
+                                        'categoryname': cardBoxId,
                                         'cardsetname': name,
                                         'cardsetid':
                                             returnCardSetAsMap(index)['id'],
@@ -280,8 +280,8 @@ class _CategoryMainState extends State<CategoryMain> {
 
   List returnCardsets() {
     List result = [];
-    for (Map d in categories) {
-      if (d['id'] == categoryID) {
+    for (Map d in cardBoxes) {
+      if (d['id'] == cardBoxId) {
         result = d['cardsets'] as List;
       }
     }
@@ -289,8 +289,8 @@ class _CategoryMainState extends State<CategoryMain> {
   }
 
   returnCategoryAsMap() {
-    for (Map d in categories) {
-      if (d['id'] == categoryID) {
+    for (Map d in cardBoxes) {
+      if (d['id'] == cardBoxId) {
         return d;
       }
     }
@@ -316,7 +316,7 @@ class _CategoryMainState extends State<CategoryMain> {
     //Delete category from tempList
     print('After Deleting \n $tempList');
     tempList.forEach((element) {
-      if (element['id'] == categoryID) {
+      if (element['id'] == cardBoxId) {
         (element['cardsets'] as List).removeAt(index);
       }
     });
@@ -332,7 +332,7 @@ class _CategoryMainState extends State<CategoryMain> {
     List tempList = json.decode(prefs.getString('categories').toString());
     //Add name, id, date and cards[] to new Cardset
     for (Map d in tempList) {
-      if (d['id'] == categoryID) {
+      if (d['id'] == cardBoxId) {
         d['cardsets'].add({
           'name': cardsetController.text.toString(),
           'id': uuid.v4(),
@@ -346,3 +346,4 @@ class _CategoryMainState extends State<CategoryMain> {
     prefs.setString('categories', json.encode(tempList).toString());
   }
 }
+ */

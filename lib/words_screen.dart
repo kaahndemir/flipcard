@@ -2,8 +2,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:FlipCard/category_screen.dart';
-import 'package:FlipCard/game_screen.dart';
+import 'package:FlipCard/cardbox.dart';
+import 'package:FlipCard/flipcard.dart';
 import 'package:FlipCard/main.dart';
 import 'package:FlipCard/res/category_creation.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +18,7 @@ class WordsScreen extends StatefulWidget {
   _WordsScreenState createState() => _WordsScreenState();
 }
 
-String categoryID = '';
+String cardBoxId = '';
 String cardsetName = '';
 String cardsetID = '';
 
@@ -29,7 +29,7 @@ class _WordsScreenState extends State<WordsScreen> {
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    categoryID = arguments['categoryname'];
+    cardBoxId = arguments['categoryname'];
     cardsetName = arguments['cardsetname'];
     cardsetID = arguments['cardsetid'];
 
@@ -360,7 +360,7 @@ class _CardsScreenState extends State<CardsScreen> {
                                                   content: Text(
                                                       'All cards are marked as Done')));
                                         } else {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => GamePage(p_cardsetID: cardsetID, p_categoryID: categoryID,)),
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => GamePage(cardBoxId: cardBoxId,)),
                                               
                                          );
                                         }
@@ -551,8 +551,8 @@ class _CardsScreenState extends State<CardsScreen> {
   }
 
   returnCategoryAsMap() {
-    for (Map d in categories) {
-      if (d['id'] == categoryID) {
+    for (Map d in cardBoxes) {
+      if (d['id'] == cardBoxId) {
         return d;
       }
     }
@@ -581,7 +581,7 @@ class _CardsScreenState extends State<CardsScreen> {
 
     tempList = json.decode(prefs.getString('categories').toString());
     tempList.forEach((element) {
-      if (element['id'] == categoryID) {
+      if (element['id'] == cardBoxId) {
         element['cardsets'].forEach((element) {
           if (element['id'] == cardsetID) {
             element['cards'].add({
@@ -608,7 +608,7 @@ class _CardsScreenState extends State<CardsScreen> {
 
     tempList = json.decode(prefs.getString('categories').toString());
     tempList.forEach((element) {
-      if (element['id'] == categoryID) {
+      if (element['id'] == cardBoxId) {
         element['cardsets'].forEach((element) {
           if (element['id'] == cardsetID) {
             element['cards'].removeAt(index);
@@ -629,7 +629,7 @@ class _CardsScreenState extends State<CardsScreen> {
 
     //Set status as 'done'
     for (var element in tempList) {
-      if (element['id'] == categoryID) {
+      if (element['id'] == cardBoxId) {
         element['cardsets'].forEach((element) {
           if (element['id'] == cardsetID) {
             element['cards'].forEach((element) {
@@ -655,7 +655,7 @@ class _CardsScreenState extends State<CardsScreen> {
 
     //Set status as 'undone'
     for (var element in tempList) {
-      if (element['id'] == categoryID) {
+      if (element['id'] == cardBoxId) {
         element['cardsets'].forEach((element) {
           if (element['id'] == cardsetID) {
             element['cards'].forEach((element) {

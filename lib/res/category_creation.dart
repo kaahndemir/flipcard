@@ -1,41 +1,86 @@
+import 'package:FlipCard/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+Map data = {
+  'name': 'Business Model',
+  'date': '2021-12-09 20:17:09.102',
+  'id': '034cbcd0-68db-11ec-808a-67e737091d63',
+  'status': 'sec',
+  //'sec' means secure 
+  //'del' means deleted
+  'tags': [],
+  'cards': [
+    {
+      'status': 'undone',
+      //undone will be shown in the cardboxes and flipcard screen
+      //done will be shown in the cardboxes screen
+      //del will be shown in the trash screen
+      'id': '8789',
+      'term': 'Key Partners',
+      'exp': 'Who you are going to cooperate with'
+    },
+    {
+      'status': 'undone',
+      'id': '8669',
+      'term': 'Value Propositions',
+      'exp': 'What benefits you offer to customer'
+    },
+    {
+      'status': 'undone',
+      'id': '8498',
+      'term': 'Key Resources',
+      'exp': 'What you have to accomplish your goal'
+    },
+    {
+      'status': 'undone',
+      'id': '1939',
+      'term': 'Revenue Streams',
+      'exp': 'Where the incomes come from'
+    },
+    {
+      'status': 'undone',
+      'id': '1899',
+      'term': 'Customer Relationship',
+      'exp': 'How you are going to communicate your customer'
+    },
+    {
+      'status': 'undone',
+      'id': '6542',
+      'term': 'Cost Structure',
+      'exp': 'What kind of outcomes you are going to have'
+    },
+  ]
+};
 
-List data = [
-  {'name': 'Entrepreneurship',
-    'id': '8456',
-    'date': '2021-11-09 20:17:09.102',
-    'cardsets': [
-      {'name': 'Business Model',
-        'date': '2021-12-09 20:17:09.102',
-        'id': '4651',
-        'cards': [
-          {'status': 'null','id': '8789','word': 'Key Partners', 'exp': 'Who you are going to cooperate with'},
-          {'status': 'null','id': '8669','word': 'Value Propositions', 'exp': 'What benefits you offer to customer'},
-          {'status': 'null','id': '8498','word': 'Key Resources', 'exp': 'What you have to accomplish your goal'},
-          {'status': 'null','id': '1939','word': 'Revenue Streams', 'exp': 'Where the incomes come from'},
-          {'status': 'null','id': '1899','word': 'Customer Relationship', 'exp': 'How you are going to communicate your customer'},
-          {'status': 'null','id': '6542','word': 'Cost Structure', 'exp': 'What kind of outcomes you are going to have'},
-        ]
-      }
-    ]
-  },
-];
-
-List categories = [];
+List cardBoxes = [];
 Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-Future setSharedPrefs() async{
+late SharedPreferences prefs;
+
+Future setSharedPrefs() async {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  SharedPreferences prefs = await _prefs;
+  prefs = await _prefs;
   var encodedMap = json.encode(data);
-  //Set shared preferences if doesn't containg any data
-  if(!prefs.containsKey('categories')){
-    prefs.setString('categories', encodedMap);
-  } else {
-    categories = json.decode(prefs.getString('categories').toString());
+  //Set shared preferences if it's empty
+
+  if (prefs.getKeys().length == 0) {
+    prefs.setString('034cbcd0-68db-11ec-808a-67e737091d63', encodedMap);
   }
-  print('setSharedPreferences() $categories');
-  return categories;
+
+  cardBoxes = await getCardBoxes();
+
+  
+
+  print('setSharedPreferences() $cardBoxes');
+  return cardBoxes;
+}
+
+List getCardBoxes() {
+  List cardBoxes = [];
+  List keys = prefs.getKeys().toList();
+  for (int i = 0; i < prefs.getKeys().length;i++) {
+    cardBoxes.add(json.decode(prefs.getString(keys[i]).toString()) as Map);
+  }
+  return cardBoxes;
 }
