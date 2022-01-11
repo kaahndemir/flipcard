@@ -79,9 +79,6 @@ class _CardBoxState extends State<CardBox> {
       }
     }
     print('SecureCards: $_secureCards');
-    setState(() {
-      _secureCards;
-    });
   }
 
   final _globalKey = GlobalKey();
@@ -92,12 +89,6 @@ class _CardBoxState extends State<CardBox> {
   @override
   void initState() {
     super.initState();
-
-    if (!cardBoxStream.hasListener) {
-      cardBoxStream.stream.listen((e) {
-        addSecureCards();
-      });
-    }
     WidgetsBinding.instance?.addPostFrameCallback(getWidgetInfo);
     print('initState => cardBox.dart');
   }
@@ -123,6 +114,13 @@ class _CardBoxState extends State<CardBox> {
       print('refreshCardBoxScreen');
       setState(() {});
     };
+
+    if (!cardBoxStream.hasListener) {
+      cardBoxStream.stream.listen((e) {
+        addSecureCards();
+      });
+    }
+    
     return SafeArea(
         child: Stack(
       children: [

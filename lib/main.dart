@@ -65,8 +65,6 @@ class _MainState extends State<Main> {
   void initState() {
     super.initState();
 
-    addSecureBoxes();
-
     if (!streamcontroller.hasListener) {
       streamcontroller.stream.listen((e) {
         addSecureBoxes();

@@ -1,4 +1,5 @@
 # To Do
 
-- [ ] Fix double displayment of items in category
+- [x] Fix double displayment of items in category
+
 
