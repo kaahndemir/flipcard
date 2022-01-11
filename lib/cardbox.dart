@@ -73,12 +73,15 @@ class _CardBoxState extends State<CardBox> {
     _secureCards = [];
     await setSharedPrefs();
     Map cardBox = json.decode(prefs.getString(boxId).toString());
+
     for (Map card in cardBox['cards']) {
       if (card['status'] != 'del') {
         _secureCards.add(card);
       }
     }
     print('SecureCards: $_secureCards');
+
+    print('addSecureCards() run');
   }
 
   final _globalKey = GlobalKey();
@@ -114,13 +117,13 @@ class _CardBoxState extends State<CardBox> {
       print('refreshCardBoxScreen');
       setState(() {});
     };
-
     if (!cardBoxStream.hasListener) {
       cardBoxStream.stream.listen((e) {
         addSecureCards();
       });
+    } else {
+      addSecureCards();
     }
-    
     return SafeArea(
         child: Stack(
       children: [
@@ -407,7 +410,7 @@ class _CardBoxState extends State<CardBox> {
 
     await setSharedPrefs();
 
-    cardBoxStream.add(1);
+    cardBoxStream.add(0);
     print('CardBox: ${cardBox}');
   }
 }
