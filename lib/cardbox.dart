@@ -84,7 +84,7 @@ class _CardBoxState extends State<CardBox> {
     });
   }
 
-  final _globalKey = new GlobalKey();
+  final _globalKey = GlobalKey();
   final _columnKey = GlobalKey();
   double heightListView = 50;
   double widthListView = 50;
@@ -93,7 +93,6 @@ class _CardBoxState extends State<CardBox> {
   void initState() {
     super.initState();
 
-    addSecureCards();
     if (!cardBoxStream.hasListener) {
       cardBoxStream.stream.listen((e) {
         addSecureCards();
