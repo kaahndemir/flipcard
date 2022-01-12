@@ -88,7 +88,7 @@ flutter:
   fonts:
      - family: Roboto
        fonts:
-         - asset: lib/assets/fonts/Roboto/Roboto-BoldItalic.ttf
+         - asset: assets/fonts/Roboto/Roboto-BoldItalic.ttf
           # style: italic
 
   #
