@@ -37,7 +37,6 @@ class _GamePageState extends State<GamePage> {
     print('initState Run $i times \n Shuffled: $shuffled');
     i++;
     createShuffledList();
-    
   }
 
   @override

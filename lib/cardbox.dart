@@ -72,9 +72,11 @@ class _CardBoxState extends State<CardBox> {
   addSecureCards() async {
     _secureCards = [];
     await setSharedPrefs();
-    Map cardBox = json.decode(prefs.getString(boxId).toString());
+    Map cardBox = await json.decode(prefs.getString(boxId).toString());
 
-    for (Map card in cardBox['cards']) {
+    for(int i = 0; i < cardBox['cards'].length; i++){
+      Map card = cardBox['cards'][i];
+       print('addSecureCard() card: $card');
       if (card['status'] != 'del') {
         _secureCards.add(card);
       }
@@ -117,230 +119,235 @@ class _CardBoxState extends State<CardBox> {
       print('refreshCardBoxScreen');
       setState(() {});
     };
+        //Set securecards
     if (!cardBoxStream.hasListener) {
       cardBoxStream.stream.listen((e) {
         addSecureCards();
       });
-    } else {
-      addSecureCards();
     }
-    return SafeArea(
-        child: Stack(
-      children: [
-        ListView(
-          shrinkWrap: true,
-          
+    
+    return FutureBuilder(
+      future: addSecureCards(),
+      builder: (context, snapshot) {
+        
+        return SafeArea(
+            child: Stack(
           children: [
-            Container(
-              padding: EdgeInsets.only(bottom: (size.height > heightListView)
-                      ? size.height - heightListView
-                      : 0),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [backgroundDark, backgroundLight])),
-              child: Column(
-                key: _columnKey,
-                children: [
-                  Container(
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.only(top: 25, left: 25, bottom: 40),
-                    child: AutoSizeText(
-                      returnCardBox()['name'],
-                      style: const TextStyle(
-                          fontSize: 30,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: _secureCards.length,
-                      itemBuilder: (context, index) {
-                        Map card = returnCardBox()['cards'][index];
-
-                        return Transform.rotate(
-                          angle: pi / -80,
-                          child: Slidable(
-                            key: UniqueKey(),
-                            endActionPane: ActionPane(
-                                extentRatio: 1 / 2,
-                                motion: ScrollMotion(),
-                                dismissible: DismissiblePane(
-                                  onDismissed: () {
-                                    removeCard(index);
-                                  },
-                                ),
-                                children: [
-                                  SlidableAction(
-                                      label: 'Delete',
-                                      foregroundColor: Colors.white,
-                                      backgroundColor: Colors.red,
-                                      onPressed: (context) {
+            ListView(
+              shrinkWrap: true,
+              
+              children: [
+                Container(
+                  padding: EdgeInsets.only(bottom: (size.height > heightListView)
+                          ? size.height - heightListView
+                          : 0),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [backgroundDark, backgroundLight])),
+                  child: Column(
+                    key: _columnKey,
+                    children: [
+                      Container(
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.only(top: 25, left: 25, bottom: 40),
+                        child: AutoSizeText(
+                          returnCardBox()['name'],
+                          style: const TextStyle(
+                              fontSize: 30,
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                      ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: _secureCards.length, // Variable's value is 0
+                          itemBuilder: (context, index) {
+                            Map card = returnCardBox()['cards'][index];
+                            return Transform.rotate(
+                              angle: pi / -80,
+                              child: Slidable(
+                                key: UniqueKey(),
+                                endActionPane: ActionPane(
+                                    extentRatio: 1 / 2,
+                                    motion: ScrollMotion(),
+                                    dismissible: DismissiblePane(
+                                      onDismissed: () {
                                         removeCard(index);
-                                      }),
-                                ]),
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 4, top: 4),
-                              alignment: Alignment.center,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(),
-                                  Container(
-                                    width: size.width - 100,
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                      color: Colors.white,
+                                      },
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Flexible(
-                                          child: Container(
-                                            padding: EdgeInsets.only(right: 5),
-                                            child: AutoSizeText(
-                                              card['term'],
-                                              maxLines: 1,
-                                              minFontSize: 20,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  color: Colors.black,
-                                                  fontFamily: 'Raleway',
-                                                  fontWeight: FontWeight.w800,
-                                                  fontStyle: FontStyle.italic),
-                                              textAlign: TextAlign.center,
+                                    children: [
+                                      SlidableAction(
+                                          label: 'Delete',
+                                          foregroundColor: Colors.white,
+                                          backgroundColor: Colors.red,
+                                          onPressed: (context) {
+                                            removeCard(index);
+                                          }),
+                                    ]),
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: 4, top: 4),
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(),
+                                      Container(
+                                        width: size.width - 100,
+                                        padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.all(Radius.circular(10)),
+                                          color: Colors.white,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Flexible(
+                                              child: Container(
+                                                padding: EdgeInsets.only(right: 5),
+                                                child: AutoSizeText(
+                                                  card['term'],
+                                                  maxLines: 1,
+                                                  minFontSize: 20,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontSize: 22,
+                                                      color: Colors.black,
+                                                      fontFamily: 'Raleway',
+                                                      fontWeight: FontWeight.w800,
+                                                      fontStyle: FontStyle.italic),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                            IconButton(
+                                              tooltip: isDone(index)
+                                                  ? 'Mark as Undone'
+                                                  : 'Mark as Done',
+                                              padding: EdgeInsets.zero,
+                                              onPressed: () {
+                                                if (isDone(index)) {
+                                                  markAsUndone(index);
+                                                } else {
+                                                  markAsDone(index);
+                                                }
+                                              },
+                                              icon: Icon(
+                                                !isDone(index)
+                                                    ? Icons.mark_as_unread_rounded
+                                                    : Icons.done,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        IconButton(
-                                          tooltip: isDone(index)
-                                              ? 'Mark as Undone'
-                                              : 'Mark as Done',
-                                          padding: EdgeInsets.zero,
-                                          onPressed: () {
-                                            if (isDone(index)) {
-                                              markAsUndone(index);
-                                            } else {
-                                              markAsDone(index);
-                                            }
-                                          },
-                                          icon: Icon(
-                                            !isDone(index)
-                                                ? Icons.mark_as_unread_rounded
-                                                : Icons.done,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                      height: 35,
-                                      width: 5,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10)),
-                                        color: Colors.red,
                                       ),
-                                      child: SizedBox())
-                                ],
+                                      Container(
+                                          height: 35,
+                                          width: 5,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10)),
+                                            color: Colors.red,
+                                          ),
+                                          child: SizedBox())
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: Container(
+                width: size.width,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    CustomPaint(
+                      size: Size(size.width, 80),
+                      painter: BNBCustomPainter(),
+                    ),
+                    Center(
+                        child: FloatingActionButton(
+                      heroTag: 3,
+                      onPressed: () {
+                        shuffled = [];
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => GamePage(cardBoxId: boxId)));
+                      },
+                      backgroundColor: Colors.transparent,
+                      child: Container(
+                        padding: EdgeInsets.only(bottom: 5),
+                        child: SvgPicture.asset(
+                          svgLogo,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      splashColor: blueMediumLight,
+                    )),
+                    Container(
+                      width: size.width,
+                      height: 80,
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            FloatingActionButton(
+                              heroTag: '1',
+                              elevation: 0,
+                              backgroundColor: Colors.transparent,
+                              tooltip: 'Restore Cards',
+                              splashColor: blueMediumLight,
+                              onPressed: () {},
+                              child: Icon(
+                                Icons.restore_from_trash_rounded,
+                                size: 50,
+                                color: Colors.white,
                               ),
                             ),
-                          ),
-                        );
-                      }),
-                ],
+                            FloatingActionButton(
+                              heroTag: '0',
+                              elevation: 0,
+                              backgroundColor: Colors.transparent,
+                              tooltip: 'Create Card',
+                              splashColor: blueMediumLight,
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => CreateCard());
+                              },
+                              child: Icon(
+                                Icons.add_circle_rounded,
+                                size: 50,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ]),
+                    )
+                  ],
+                ),
               ),
             ),
           ],
-        ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          child: Container(
-            width: size.width,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                CustomPaint(
-                  size: Size(size.width, 80),
-                  painter: BNBCustomPainter(),
-                ),
-                Center(
-                    child: FloatingActionButton(
-                  heroTag: 3,
-                  onPressed: () {
-                    shuffled = [];
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => GamePage(cardBoxId: boxId)));
-                  },
-                  backgroundColor: Colors.transparent,
-                  child: Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: SvgPicture.asset(
-                      svgLogo,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  splashColor: blueMediumLight,
-                )),
-                Container(
-                  width: size.width,
-                  height: 80,
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        FloatingActionButton(
-                          heroTag: '1',
-                          elevation: 0,
-                          backgroundColor: Colors.transparent,
-                          tooltip: 'Restore Cards',
-                          splashColor: blueMediumLight,
-                          onPressed: () {},
-                          child: Icon(
-                            Icons.restore_from_trash_rounded,
-                            size: 50,
-                            color: Colors.white,
-                          ),
-                        ),
-                        FloatingActionButton(
-                          heroTag: '0',
-                          elevation: 0,
-                          backgroundColor: Colors.transparent,
-                          tooltip: 'Create Card',
-                          splashColor: blueMediumLight,
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) => CreateCard());
-                          },
-                          child: Icon(
-                            Icons.add_circle_rounded,
-                            size: 50,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ]),
-                )
-              ],
-            ),
-          ),
-        ),
-      ],
-    ));
+        ));
+      }
+    );
   }
 
   formatDate(String date) {
@@ -354,15 +361,18 @@ class _CardBoxState extends State<CardBox> {
 
   isDone(index) {
     setSharedPrefs();
+    bool result = false;
+
+    result = _secureCards[index]['status'] == 'done';
 
     for (int i = 0; i < _secureCards.length; i++) {
       if (_secureCards[i]['id'] == boxId) {
         if (_secureCards[i]['cards'][index]['status'] == 'done') {
-          return true;
+          result = true;
         }
       }
     }
-    return false;
+    return result;
   }
 
   //This will return cardbox as Map
