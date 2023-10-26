@@ -1,3 +1,5 @@
+![flipcard-cover](https://github.com/codeoguz/flipcard/assets/89513831/c48265f0-acc9-48b3-8208-5edcad00a372)
+
 # FlipCard
 
 FlipCard is an app to study your life taking memorizing classes.
